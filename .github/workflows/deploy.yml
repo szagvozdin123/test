@@ -41,8 +41,8 @@ jobs:
         run: |
           config=$(cat ./config.yml)
           images=$(yq -r '.aws_images | to_entries | .[] | .key' ./config.yml)
-          echo IMAGES="[$(echo $images | sed 's/ /, /g')]" >> $GITHUB_OUTPUT
+          echo IMAGES="{$(echo $images | sed 's/ /, /g')}" >> $GITHUB_OUTPUT
           #echo "::set-output name=images::$images"
       - name: Echo IMAGES
         shell: bash
-        run: echo ${{ steps.images.outputs.IMAGES }}
+        run: echo ${{ fromJSON(steps.images.outputs.IMAGES) }}
