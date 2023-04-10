@@ -1,0 +1,19 @@
+---
+# Image Build
+aws_images:
+  ubuntu18-lacework-standard:
+    owner: "099720109477"
+    path: "ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-amd64-server-*"
+    ssh_user: "ubuntu"
+    lacework: 1
+  # Uncomment when it goes live
+  ubuntu22-lacework-standard:
+    owner: "099720109477"
+    path: "ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"
+    ssh_user: "ubuntu"
+    lacework: 1
+  #al2-lacework-standard:
+  #  owner: "amazon"
+  #  path: "amzn2-ami-hvm-*-x86_64-ebs"
+  #  ssh_user: "ec2-user"
+  #  lacework: 1

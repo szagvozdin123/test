@@ -18,6 +18,9 @@ env:
 
 jobs:
   deploy:
+    #strategy:
+     # matrix:
+        #os: [ubuntu-18-standard, ubuntu-22-standard]
     runs-on: ubuntu-latest
     steps:
       - name: "Reason: ${{ github.event.inputs.reason || 'Scheduled deploy' }}"
@@ -32,3 +35,9 @@ jobs:
           version: ${{env.PACKER_VERSION}}
       - name: Echo packer
         run: packer version
+      - name: Get images
+        shell: bash
+        run: |
+          config=$(cat ../../config.yml)
+          images=$(yq -r '.aws_images | to_entries | .[] | .key' ../../config.yml)
+          echo "::set-output name=images::$images"
