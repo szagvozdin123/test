@@ -1,0 +1,34 @@
+---
+name: deploy_images
+on:
+  push:
+    branches:
+      - testing
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: "Reason for running job"
+        required: true
+        type: string
+
+concurrency: build-images
+
+env:
+  PACKER_VERSION: 1.8.6
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Reason: ${{ github.event.inputs.reason || 'Scheduled deploy' }}"
+        env:
+          REASON: ${{ github.event.inputs.reason || 'Scheduled deploy' }}
+        run: echo $REASON
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+      - name: Setup packer
+        uses: hashicorp/setup-packer@main
+        with:
+          version: ${{env.PACKER_VERSION}}
+      - name: Echo packer
+        run: packer version
