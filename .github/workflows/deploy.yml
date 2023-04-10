@@ -37,7 +37,12 @@ jobs:
         run: packer version
       - name: Get images
         shell: bash
+        id: images
         run: |
           config=$(cat ./config.yml)
           images=$(yq -r '.aws_images | to_entries | .[] | .key' ./config.yml)
-          echo "::set-output name=images::$images"
+          echo IMAGES="[$(echo $images | sed 's/ /, /g')]" >> $GITHUB_OUTPUT
+          #echo "::set-output name=images::$images"
+      - name: Echo IMAGES
+        shell: bash
+        run: echo ${{ fromJSON(images.outputs.IMAGES) }}
