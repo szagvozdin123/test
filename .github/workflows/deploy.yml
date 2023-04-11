@@ -49,4 +49,4 @@ jobs:
         shell: bash
         run: |
           echo '${{ steps.images.outputs.IMAGES }}'
-          echo "${{ fromJSON(steps.images.outputs.IMAGES).images }}"
+          echo "${{ fromJSON(steps.images.outputs.IMAGES).images[1] }}"
