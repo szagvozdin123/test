@@ -17,36 +17,27 @@ env:
   PACKER_VERSION: 1.8.6
 
 jobs:
-  deploy:
-    #strategy:
-     # matrix:
-        #os: [ubuntu-18-standard, ubuntu-22-standard]
+  setup:
     runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.getImages.outputs.IMAGES }}
     steps:
-      - name: "Reason: ${{ github.event.inputs.reason || 'Scheduled deploy' }}"
-        env:
-          REASON: ${{ github.event.inputs.reason || 'Scheduled deploy' }}
-        run: echo $REASON
       - name: Checkout Repo
         uses: actions/checkout@v3
-      - name: Setup packer
-        uses: hashicorp/setup-packer@main
-        with:
-          version: ${{env.PACKER_VERSION}}
-      - name: Echo packer
-        run: packer version
       - name: Get images
-        shell: bash
-        id: images
+        id: getImages
         run: |
-          #config=$(cat ./config.yml)
-          #images=$(yq -r '.aws_images | to_entries | .[] | .key' ./config.yml)
           images=$(jq -ncR '{images:[inputs]}' <<< $(yq -r '.aws_images | to_entries | .[] | .key' ./config.yml))
           echo $images
           echo IMAGES="$images" >> $GITHUB_OUTPUT
-          #echo "::set-output name=images::$images"
+  deploy:
+    strategy:
+      matrix:
+        os: ${{ fromJSON(needs.setup.outputs.matrix).images }}
+    runs-on: ubuntu-latest
+    needs: setup
+    steps:
       - name: Echo IMAGES
         shell: bash
         run: |
-          echo '${{ steps.images.outputs.IMAGES }}'
-          echo "${{ fromJSON(steps.images.outputs.IMAGES).images[1] }}"
+          echo '${{ matrix.os }}'
