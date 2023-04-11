@@ -47,4 +47,6 @@ jobs:
           #echo "::set-output name=images::$images"
       - name: Echo IMAGES
         shell: bash
-        run: echo ${{ fromJSON(steps.images.outputs.IMAGES) }}
+        run: |
+          echo ${{ steps.images.outputs.IMAGES }}
+          echo ${{ fromJSON(steps.images.outputs.IMAGES) }}
