@@ -41,7 +41,7 @@ jobs:
         run: |
           #config=$(cat ./config.yml)
           #images=$(yq -r '.aws_images | to_entries | .[] | .key' ./config.yml)
-          images=$(jq -ncR '[inputs]' <<< $(yq -r '.aws_images | to_entries | .[] | .key' ./config.yml))
+          images=$(jq -ncR '{images:[inputs]}' <<< $(yq -r '.aws_images | to_entries | .[] | .key' ./config.yml))
           echo $images
           echo IMAGES="$images" >> $GITHUB_OUTPUT
           #echo "::set-output name=images::$images"
@@ -49,4 +49,4 @@ jobs:
         shell: bash
         run: |
           echo '${{ steps.images.outputs.IMAGES }}'
-          echo ${{ fromJSON('steps.images.outputs.IMAGES') }}
+          echo ${{ fromJSON(steps.images.outputs.IMAGES) }}
