@@ -42,7 +42,8 @@ jobs:
           #config=$(cat ./config.yml)
           #images=$(yq -r '.aws_images | to_entries | .[] | .key' ./config.yml)
           images=$(jq -ncR '[inputs]' <<< $(yq -r '.aws_images | to_entries | .[] | .key' ./config.yml))
-          echo IMAGES="$(echo $images)" >> $GITHUB_OUTPUT
+          echo $images
+          echo IMAGES="$images" >> $GITHUB_OUTPUT
           #echo "::set-output name=images::$images"
       - name: Echo IMAGES
         shell: bash
