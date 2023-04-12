@@ -43,12 +43,13 @@ jobs:
           version: ${{env.PACKER_VERSION}}
       - name: Packer validate
         run: packer validate ./linux.pkr.hcl
+        shell: bash
         env:
           name: '${{ matrix.os.key }}'
           product: 'secure-base-image'
           owner: '${{ matrix.os.value.owner }}'
           path: '${{ matrix.os.value.path }}'
-          user: '${{ matrix.os.value.user }}'
+          user: '${{ matrix.os.value.ssh_user }}'
           env: 'dev'
           regions: 'us-east-1'
           region: 'us-east-1'
