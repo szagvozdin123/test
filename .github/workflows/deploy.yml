@@ -43,6 +43,11 @@ jobs:
         uses: hashicorp/setup-packer@main
         with:
           version: ${{env.PACKER_VERSION}}
+      - name: Get profile
+        id: getProfile
+        run: echo PROFILE="${NAME##*-}" >> $GITHUB_OUTPUT
+        env:
+          NAME: '${{ matrix.os.key }}'
       - name: Packer validate
         run: | 
           packer init ./linux.pkr.hcl
@@ -62,8 +67,4 @@ jobs:
           epic_org_arn: 'arn'
           vpc_id: 'vpc-id'
           subnet_id: 'subnet-id'
-          security_profile: 'standard'
-      - name: Echo IMAGES
-        shell: bash
-        run: |
-          echo '${{ matrix.os.value.path }}'
+          security_profile: '${{ steps.getProfile.outputs.PROFILE }}'
