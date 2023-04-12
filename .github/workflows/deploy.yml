@@ -27,17 +27,17 @@ jobs:
       - name: Get images
         id: getImages
         run: |
-          images=$(jq -ncR '[inputs]' <<< $(yq -r '... comments="" | .aws_images | to_entries | .[]' ./config.yml))
+          images=$(jq -ncR '{images:[inputs]}' <<< $(yq -r '... comments="" | .aws_images | to_entries | .[]' ./config.yml))
           echo $images
           echo IMAGES="$images" >> $GITHUB_OUTPUT
   deploy:
     strategy:
       matrix:
-        os: ${{ fromJSON(needs.setup.outputs.matrix).key }}
+        os: ${{ fromJSON(needs.setup.outputs.matrix).images }}
     runs-on: ubuntu-latest
     needs: setup
     steps:
       - name: Echo IMAGES
         shell: bash
         run: |
-          echo '${{ matrix.os }}'
+          echo '${{ matrix.os.key }}'
