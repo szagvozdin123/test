@@ -27,13 +27,13 @@ jobs:
       - name: Get images
         id: getImages
         run: |
-          images=$(jq -ncR '{images:[inputs]}' <<< $(yq -r '.aws_images | to_entries | .[] | .key' ./config.yml))
+          images=$(jq -ncR '[inputs]' <<< $(yq -r '.aws_images | to_entries | .[].key' ./config.yml))
           echo $images
           echo IMAGES="$images" >> $GITHUB_OUTPUT
   deploy:
     strategy:
       matrix:
-        os: ${{ fromJSON(needs.setup.outputs.matrix).images }}
+        os: ${{ fromJSON(needs.setup.outputs.matrix) }}
     runs-on: ubuntu-latest
     needs: setup
     steps:
