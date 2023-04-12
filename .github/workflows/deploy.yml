@@ -45,7 +45,7 @@ jobs:
           version: ${{env.PACKER_VERSION}}
       - name: Packer validate
         run: | 
-          packer init
+          packer init ./linux.pkr.hcl
           packer validate ./linux.pkr.hcl
         shell: bash
         env:
