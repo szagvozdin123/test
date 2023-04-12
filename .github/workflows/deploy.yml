@@ -44,7 +44,9 @@ jobs:
         with:
           version: ${{env.PACKER_VERSION}}
       - name: Packer validate
-        run: packer validate ./linux.pkr.hcl
+        run: | 
+          packer init
+          packer validate ./linux.pkr.hcl
         shell: bash
         env:
           name: '${{ matrix.os.key }}'
