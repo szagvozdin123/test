@@ -27,7 +27,7 @@ jobs:
       - name: Get images
         id: getImages
         run: |
-          images=$(yq -r -o=json '... comments="" | .aws_images | to_entries' ./config.yml)
+          images=$(yq -r -o=json '... comments="" | .aws_images | to_entries' ./config.yml | jq -c)
           echo $images
           echo IMAGES="$images" >> $GITHUB_OUTPUT
   deploy:
