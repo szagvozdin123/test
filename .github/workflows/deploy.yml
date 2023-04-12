@@ -37,6 +37,27 @@ jobs:
     runs-on: ubuntu-latest
     needs: setup
     steps:
+      - name: Setup packer
+        uses: hashicorp/setup-packer@main
+        with:
+          version: ${{env.PACKER_VERSION}}
+      - name: Packer validate
+        run: packer validate ./linux.pkr.hcl
+        env:
+          name: '${{ matrix.os.key }}'
+          product: 'secure-base-image'
+          owner: '${{ matrix.os.value.owner }}'
+          path: '${{ matrix.os.value.path }}'
+          user: '${{ matrix.os.value.user }}'
+          env: 'dev'
+          regions: 'us-east-1'
+          region: 'us-east-1'
+          iam_instance_profile: 'test-profile'
+          kms_key_id: 'alias/test-kms-key'
+          epic_org_arn: 'arn'
+          vpc_id: 'vpc-id'
+          subnet_id: 'subnet-id'
+          security_profile: 'standard'
       - name: Echo IMAGES
         shell: bash
         run: |
