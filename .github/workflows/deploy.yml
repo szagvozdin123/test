@@ -27,7 +27,7 @@ jobs:
       - name: Get images
         id: getImages
         run: |
-          images=$(jq -ncR '[inputs]' <<< $(yq -r '.aws_images | to_entries | .[].key' ./config.yml))
+          images=$(jq -ncR '[inputs]' <<< $(yq -r '... comments="" | .aws_images' ./config.yml))
           echo $images
           echo IMAGES="$images" >> $GITHUB_OUTPUT
   deploy:
@@ -40,4 +40,4 @@ jobs:
       - name: Echo IMAGES
         shell: bash
         run: |
-          echo '${{ matrix.os }}'
+          echo '${{ matrix.os.key }}'
