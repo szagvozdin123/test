@@ -33,11 +33,11 @@ jobs:
   deploy:
     strategy:
       matrix:
-        os: ${{ fromJSON(needs.setup.outputs.matrix) }}
+        os: ${{ fromJSON(needs.setup.outputs.matrix).key }}
     runs-on: ubuntu-latest
     needs: setup
     steps:
       - name: Echo IMAGES
         shell: bash
         run: |
-          echo '${{ matrix.os.key }}'
+          echo '${{ matrix.os }}'
