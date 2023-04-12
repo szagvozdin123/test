@@ -40,4 +40,4 @@ jobs:
       - name: Echo IMAGES
         shell: bash
         run: |
-          echo '${{ matrix.os.key }}'
+          echo '${{ matrix.os.value.path }}'
